@@ -10,8 +10,10 @@ from bs4 import BeautifulSoup as bs
 #page = "http://www.imdb.com/title/tt0944947/reviews?ref_=tt_urv"
 #page = "http://www.imdb.com/title/tt6294822/reviews?ref_=tt_urv" # required url page where the movie reviews are residing
 #page = "http://www.imdb.com/title/tt2704998/reviews?ref_=tt_urv"
-page = "http://www.imdb.com/title/tt2873282/reviews?ref_=tt_urv"
+#page = "http://www.imdb.com/title/tt2873282/reviews?ref_=tt_urv"
 
+## Moana Movie #####
+page= "http://www.imdb.com/title/tt3521164/reviews?ref_=tt_urv"
 # Importing few exceptions to surpass the error messages while extracting reviews 
 from selenium.common.exceptions import NoSuchElementException 
 from selenium.common.exceptions import ElementNotVisibleException
@@ -41,14 +43,15 @@ soup=bs(ps,"html.parser")
 
 #Extracting the reviews present in div html_tag having class containing "text" in its value
 reviews = soup.findAll("div",attrs={"class","text"})
-
-# Extracting the text data from tags (reviews)
 for i in range(len(reviews)):
     reviews[i] = reviews[i].text
 
 ##### If we want only few recent reviews you can either press ctrl+c to break the operation in middle but the it will store 
 ##### Whatever data it has extracted so far #######
-len(reviews)
 
-with open("reviews.txt","w") as rev:
-    rev.write(str(reviews))
+# Creating a data frame 
+import pandas as pd
+movie_reviews = pd.DataFrame(columns = ["reviews"])
+movie_reviews["reviews"] = reviews
+
+movie_reviews.to_csv("movie_reviews.csv",encoding="utf-8")
